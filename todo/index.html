@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todolist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #1f1f2e;
+            color: white;
+
+            /* center whole block */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        h1 {
+            margin-bottom: 15px;
+            text-align: left;
+            /* keep heading left */
+        }
+
+        .container {
+            background: #2c2c3e;
+            padding: 15px;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        input {
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            outline: none;
+            background: #1f1f2e;
+            color: white;
+            width: 65%;
+            /* stays left, no centering */
+        }
+
+        #btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            background: #6c63ff;
+            color: white;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        #btn:hover {
+            background: #574fd6;
+        }
+
+        ul {
+            margin-top: 10px;
+        }
+
+        li {
+            background: #3a3a50;
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        li button {
+            background: #ff4d4d;
+            border: none;
+            color: white;
+            padding: 4px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .done {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1<div class="wrapper">
+        <h1>Add tasks</h1>
+
+        <div class="container">
+            <input type="text" id="inputget" placeholder="enter the task">
+            <button onclick="addtask()" id="btn">add</button>
+
+            <ul id="result"></ul>
+        </div>
+        </div>
+        <script>
+            let list = [];
+
+            function addtask() {
+                let inputBox = document.getElementById("inputget");
+                let value = inputBox.value;
+
+                if (value == "") return;
+
+                list.push(value);
+
+                let li = document.createElement("li");
+
+                let span = document.createElement("span");
+                span.innerText = value;
+
+                li.appendChild(span);
+
+                li.onclick = function () {
+                    li.classList.toggle("done");
+                };
+
+                // DELETE BUTTON
+                let delBtn = document.createElement("button");
+                delBtn.innerText = "delete";
+
+                delBtn.onclick = function (event) {
+                    event.stopPropagation();
+
+                    li.remove();
+
+                    list = list.filter(function (item) {
+                        return item !== span.innerText;
+                    });
+                };
+
+                // EDIT BUTTON
+                let editBtn = document.createElement("button");
+                editBtn.innerText = "edit";
+
+                editBtn.onclick = function (event) {
+                    event.stopPropagation();
+
+                    let inputEdit = document.createElement("input");
+                    inputEdit.value = span.innerText;
+
+                    li.replaceChild(inputEdit, span);
+
+                    editBtn.innerText = "save";
+
+                    editBtn.onclick = function (event) {
+                        event.stopPropagation();
+
+                        span.innerText = inputEdit.value;
+
+                        list = list.map(function (item) {
+                            if (item === value) {
+                                return inputEdit.value;
+                            } else {
+                                return item;
+                            }
+                        });
+
+                        li.replaceChild(span, inputEdit);
+
+                        editBtn.innerText = "edit";
+                    };
+                };
+
+                li.appendChild(editBtn);
+                li.appendChild(delBtn);
+
+                document.getElementById("result").appendChild(li);
+
+                inputBox.value = "";
+            }
+
+        </script>
+</body>
+
+</html>
